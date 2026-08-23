@@ -1,0 +1,11 @@
+product_id,revenue_aed,units,current_stock,target_stock,tier
+P01,14800,44,18,12,Hero
+P02,9400,31,0,22,Hero
+P03,4600,14,0,9,Hero
+P04,7100,35,21,8,Hero
+P05,6200,42,3,28,Hero
+P06,5700,88,16,49,Hero
+P07,3200,29,0,26,Hero
+P08,4100,33,11,5,Hero
+P09,2100,18,0,13,Hero
+P10,3600,22,4,10,Hero
