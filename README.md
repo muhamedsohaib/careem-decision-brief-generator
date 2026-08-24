@@ -8,11 +8,11 @@
 
 ## Submission summary
 
-I built an evidence-first Decision Brief Generator that converts raw operational CSV data into a concise business decision brief. The tool identifies metrics, calculates operating performance, checks data quality, separates observed facts from hypotheses, and recommends next actions. Users can explore a transformed Amazon operations sample or upload a CSV and change the primary KPI to see the analysis update dynamically. Conflicting data blocks recommendations rather than allowing unsupported conclusions. Calculations happen deterministically before the AI reasoning layer, so AI is used for explanation and decision framing rather than inventing metrics, replacing evidence, or taking authority from the human operator.
+I built an evidence-first Decision Brief Generator that converts raw operational CSV data into a concise business decision brief. The tool identifies metrics, calculates operating performance, checks data quality, separates observed facts from hypotheses, and recommends next actions. Users can explore a transformed ecommerce operations sample or upload a CSV and change the primary KPI to see the analysis update dynamically. Conflicting data blocks recommendations rather than allowing unsupported conclusions. Calculations happen deterministically before the AI reasoning layer, so AI is used for explanation and decision framing rather than inventing metrics, replacing evidence, or taking authority from the human operator.
 
 ## What the prototype does
 
-- Loads a transformed representative Amazon operations sample or a CSV uploaded in the browser.
+- Loads a transformed representative ecommerce operations sample or a CSV uploaded in the browser.
 - Detects the analysis mode from the schema rather than the filename.
 - Selects a business-relevant primary KPI and recalculates when the KPI changes.
 - Infers AED, USD, SAR, EUR, and GBP when the currency is unambiguous.
@@ -23,7 +23,9 @@ I built an evidence-first Decision Brief Generator that converts raw operational
 
 ## Data and privacy
 
-The built-in sample is representative and transformed. Product IDs are synthetic and the numerical values are not original commercial figures. It contains no ASINs, SKUs, listing IDs, product names, customer information, credentials, or confidential marketplace data.
+The built-in sample is representative and transformed. Product IDs are synthetic and the numerical values are not original commercial figures. It contains no real storefront identifiers, listing IDs, product names, customer information, credentials, or confidential commercial data.
+
+The analyzer is platform-agnostic: CSVs can come from Shopify, Noon, marketplaces, storefront systems, or self-created operational datasets when relevant numeric fields are present.
 
 CSV uploads are processed entirely in the browser by the deployed prototype and are not sent to an application backend. The UI limits uploads to 5 MB. Do not upload credentials, personally identifiable information, or confidential commercial data to any public demo.
 
