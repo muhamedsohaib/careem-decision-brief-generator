@@ -333,7 +333,7 @@ export default function DecisionBriefApp() {
   const initial = useMemo(() => table ? analyze(table) : null, [table]);
   const effectiveKpi = initial && initial.numericColumns.includes(kpiOverride) ? kpiOverride : initial?.primaryKpi ?? '';
   const result = useMemo(() => table ? analyze(table, effectiveKpi || undefined) : null, [table, effectiveKpi]);
-  const sourceLabel = source === 'sample' ? `Sanitized representative Amazon operations sample${injectConflict ? ' + injected conflicting record' : ''}` : uploadedName ? `Uploaded CSV: ${uploadedName}` : '';
+  const sourceLabel = source === 'sample' ? `Sanitized representative ecommerce operations sample${injectConflict ? ' + injected conflicting record' : ''}` : uploadedName ? `Uploaded CSV: ${uploadedName}` : '';
   const bars = table && result ? chartRows(table, result) : [];
   const maxBar = Math.max(...bars.map(([, value]) => value), 1);
 
@@ -391,7 +391,7 @@ export default function DecisionBriefApp() {
 
         <details><summary>Optional AI reasoning layer</summary><div className='details-body'><p>The calculations and evidence above are deterministic. Dataset-derived text is treated as untrusted data, never as model instructions.</p><pre>{reasoningPrompt(result)}</pre></div></details>
         <details><summary>Why this architecture</summary><div className='details-body architecture'><p><b>1. Measure first.</b> CSV parsing, data-quality checks and KPI calculations are deterministic.</p><p><b>2. Separate fact from inference.</b> Observations, hypotheses and recommended actions are rendered independently.</p><p><b>3. Fail closed.</b> Conflicting entity records block recommendations instead of being silently averaged.</p><p><b>4. Treat uploaded text as data.</b> Dataset-derived labels are bounded and placed behind an instruction/data boundary.</p><p><b>5. Use AI as leverage.</b> An LLM may compress evidence into an executive narrative, but it does not calculate the facts or own the decision.</p></div></details>
-        <footer>The built-in sample is representative and transformed: no ASINs, SKUs, product names, customer data, credentials, or original commercial figures are included.</footer>
+        <footer>The built-in sample is representative and transformed: no real storefront identifiers, product names, customer data, credentials, or original commercial figures are included.</footer>
       </>}
     </main>
   </div>;
