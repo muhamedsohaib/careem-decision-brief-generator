@@ -1,5 +1,7 @@
 import { useMemo, useRef, useState, type ChangeEvent } from 'react';
 import './decision.css';
+import './theme.css';
+import ThemeToggle from './ThemeToggle';
 
 type Cell = string | number | null;
 type Row = Record<string, Cell>;
@@ -357,13 +359,13 @@ export default function DecisionBriefApp() {
 
   return <div className='shell'>
     <aside className='sidebar'>
-      <div className='brand'>DB</div>
+      <div className='sidebar-top'><div className='brand'>DB</div><ThemeToggle /></div>
       <div><div className='side-label'>DATA INPUT</div><h2>Source</h2></div>
       <div className='segmented' role='radiogroup' aria-label='Data source'>
         <button className={source === 'sample' ? 'active' : ''} onClick={() => selectSource('sample')}>Sanitized sample</button>
         <button className={source === 'upload' ? 'active' : ''} onClick={() => selectSource('upload')}>Upload CSV</button>
       </div>
-      {source === 'sample' ? <label className='toggle-row'><input type='checkbox' checked={injectConflict} onChange={event => setInjectConflict(event.target.checked)} /><span><b>Demonstrate safety gate</b><small>Adds a conflicting duplicate so recommendations must stop.</small></span></label> : <div className='upload-box'><label htmlFor='csv-upload'>CSV file</label><input ref={fileRef} id='csv-upload' type='file' accept='.csv,text/csv' onChange={onUpload} /><small>Maximum 5 MB. Processing stays in this browser session.</small></div>}
+      {source === 'sample' ? <label className='toggle-row safety-demo'><input type='checkbox' checked={injectConflict} onChange={event => setInjectConflict(event.target.checked)} /><span><b>Test data-conflict safety gate</b><small>Optional demo: deliberately injects a conflicting P02 record to prove unsafe recommendations are blocked.</small></span></label> : <div className='upload-box'><label htmlFor='csv-upload'>CSV file</label><input ref={fileRef} id='csv-upload' type='file' accept='.csv,text/csv' onChange={onUpload} /><small>Maximum 5 MB. Processing stays in this browser session.</small></div>}
       {result?.numericColumns.length ? <div className='control'><label htmlFor='kpi'>PRIMARY KPI</label><select id='kpi' value={effectiveKpi} onChange={event => setKpiOverride(event.target.value)}>{result.numericColumns.map(column => <option key={column}>{column}</option>)}</select></div> : null}
       <div className='privacy-note'><b>Privacy</b><span>Do not upload credentials, PII, or confidential commercial data to a public demo.</span></div>
     </aside>
