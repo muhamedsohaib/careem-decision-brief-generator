@@ -1,8 +1,18 @@
 # Decision Brief Generator
 
+**Careem Challenge Selected: #1 — Decision Brief Generator**
+
+> **Challenge:** Create a tool that turns raw data into summaries and recommended business actions.
+
+**Live prototype:** https://careem-decision-brief-generator-nalpmx.v2.appdeploy.ai/
+
 An evidence-first operations tool that turns raw CSV data into a decision brief without allowing the narrative layer to invent facts.
 
 The application separates **measurement**, **inference**, and **action**. Calculations are deterministic; the optional AI reasoning prompt receives only evidence already computed by the engine and explicitly treats dataset-derived text as untrusted data.
+
+## Submission summary
+
+I built an evidence-first Decision Brief Generator that converts raw operational CSV data into a concise business decision brief. The tool identifies useful metrics, calculates operating performance, checks data quality, separates observed facts from hypotheses, and recommends concrete next actions. Users can explore a transformed Amazon operations sample or upload their own CSV and change the primary KPI to see the analysis update dynamically. Conflicting data blocks recommendations rather than allowing unsupported conclusions. Calculations are performed deterministically before any optional AI reasoning layer, so AI is used for explanation and decision framing rather than inventing metrics or replacing human judgment.
 
 ## What it demonstrates
 
@@ -12,6 +22,7 @@ The application separates **measurement**, **inference**, and **action**. Calcul
 - KPI selection based on business semantics rather than the first numeric column
 - Currency-aware display for AED, SAR, USD, EUR, and GBP when the currency can be inferred
 - Chronological comparisons only when a usable date field exists
+- A concise executive summary before detailed evidence
 - Separate observed facts, hypotheses, recommended actions, and unknowns
 - Fail-closed behavior when duplicate entity records conflict
 - Bounded dataset labels plus an explicit instruction/data boundary for the optional LLM prompt
@@ -46,6 +57,8 @@ Safe parsing and schema profiling
 Data-quality gate
         ↓
 Deterministic KPI calculations
+        ↓
+Executive summary
         ↓
 Observed facts
         ↓
@@ -95,7 +108,9 @@ The regression suite covers dynamic stockout decisions, conflicting duplicates, 
 
 ## Privacy and deployment
 
-A public Streamlit deployment is a server-side application. Do not upload credentials, personally identifiable information, or confidential commercial data. See [SECURITY.md](SECURITY.md) for the repository's data-handling expectations.
+The public prototype is intended for evaluation using the built-in transformed sample or non-confidential CSV data. Do not upload credentials, personally identifiable information, or confidential commercial data.
+
+The repository contains the Streamlit reference implementation and remains private unless access is explicitly granted. See [SECURITY.md](SECURITY.md) for the repository's data-handling expectations.
 
 ## Limits
 
@@ -103,4 +118,4 @@ This prototype does not claim causal effects or forecast financial uplift from t
 
 ## License
 
-Copyright © 2026 Muhammad Sohaib. This repository is public for evaluation, portfolio review, and demonstration; see [LICENSE](LICENSE) for the applicable terms.
+Copyright © 2026 Muhammad Sohaib. The source is maintained for evaluation and portfolio review; see [LICENSE](LICENSE) for the applicable terms.
