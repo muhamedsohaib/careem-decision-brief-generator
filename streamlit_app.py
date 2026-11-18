@@ -25,6 +25,45 @@ def format_value(value, kind: str | None, currency: str | None = None, decimals:
     return f"{value:,.{decimals}f}"
 
 
+def executive_summary(result: dict) -> str:
+    if result["blocked"]:
+        return (
+            "Decision is blocked because the data-quality gate found a conflict or invalid input. "
+            "Resolve the blocking issue before using this dataset for an operational recommendation."
+        )
+
+    metrics = result["metrics"]
+    kpi = result.get("primary_kpi") or "primary KPI"
+
+    if result["mode"] == "inventory_operations":
+        parts = []
+        stockouts = metrics.get("stockout_count")
+        below_target = metrics.get("below_target_count")
+        row_count = metrics.get("row_count", 0)
+        if stockouts is not None:
+            parts.append(f"{stockouts} of {row_count} item(s) are stocked out.")
+        if below_target is not None:
+            parts.append(f"{below_target} item(s) are below target stock.")
+        if result["actions"]:
+            parts.append(f"Priority action: {result['actions'][0]}")
+        return " ".join(parts)
+
+    parts = []
+    if metrics.get("kpi_sum") is not None:
+        parts.append(
+            f"Observed total {kpi} is "
+            + format_value(metrics["kpi_sum"], result.get("kpi_kind"), result.get("currency"))
+            + "."
+        )
+    if metrics.get("top_group") is not None and metrics.get("top_group_share_pct") is not None:
+        parts.append(
+            f"{metrics['top_group']} represents {metrics['top_group_share_pct']:.1f}% of the observed total."
+        )
+    if result["actions"]:
+        parts.append(f"Recommended next step: {result['actions'][0]}")
+    return " ".join(parts) or "The supplied data supports a descriptive review, but not a specific operating change yet."
+
+
 def brief_text(result: dict, source_label: str) -> str:
     lines = [
         "DECISION BRIEF",
@@ -32,6 +71,9 @@ def brief_text(result: dict, source_label: str) -> str:
         f"Analysis mode: {result['mode']}",
         f"Primary KPI: {result.get('primary_kpi') or 'Unavailable'}",
         f"Confidence: {result['confidence']}",
+        "",
+        "EXECUTIVE SUMMARY",
+        executive_summary(result),
         "",
         "OBSERVED FACTS",
     ]
@@ -57,6 +99,10 @@ st.markdown(
       [data-testid="stSidebar"] { background: #ffffff; }
       h1, h2, h3, h4 { color: #19163d; }
       .eyebrow { font-size: .78rem; letter-spacing: .12em; font-weight: 700; color: #6366f1; }
+      .challenge-badge {
+        display:inline-block; margin-bottom:.65rem; padding:.32rem .65rem; border-radius:999px;
+        background:#19163d; color:#fff; font-size:.72rem; letter-spacing:.08em; font-weight:800;
+      }
       .mode-pill {
         display:inline-block; padding:.28rem .62rem; border-radius:999px;
         background:#eef2ff; color:#4338ca; font-size:.8rem; font-weight:700;
@@ -70,6 +116,10 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+st.markdown(
+    '<div class="challenge-badge">CAREEM CHALLENGE #1 · DECISION BRIEF GENERATOR</div>',
+    unsafe_allow_html=True,
+)
 st.markdown('<div class="eyebrow">EVIDENCE-FIRST OPERATIONS INTELLIGENCE</div>', unsafe_allow_html=True)
 st.title(APP_TITLE)
 st.caption(
@@ -227,6 +277,10 @@ with metric_col:
 
 st.divider()
 st.markdown("### Decision brief")
+
+with st.container(border=True):
+    st.markdown("#### Executive summary")
+    st.write(executive_summary(result))
 
 fact_col, action_col = st.columns(2)
 with fact_col:
